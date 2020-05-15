@@ -41,6 +41,8 @@ class AcceptanceTester extends Actor
 
     const REGISTERED_CUSTOMER = 'registered customer';
 
+    const ADMIN_USER = 'admin user';
+
     //this is used to generate new class instance, so const doesn't work here
     private $shopInstanceMap = [
         'prestashop' => Step\Acceptance\ShopSystem\PrestashopStep::class,
@@ -252,7 +254,8 @@ class AcceptanceTester extends Actor
         $shopInstance = new $this->shopInstanceMap[$shopSystemName]($this->getScenario(),
                                                                     $this->gateway,
                                                                     $this->configData->guest_customer_data,
-                                                                    $this->configData->registered_customer_data);
+                                                                    $this->configData->registered_customer_data,
+                                                                    $this->configData->admin_data);
         $shopInstance->configureShopSystemCurrencyAndCountry(
             $this->configData->currency,
             $this->configData->default_country
@@ -290,5 +293,26 @@ class AcceptanceTester extends Actor
         if (!$this->paymentMethodCreated($paymentMethod)) {
             $this->paymentMethod = $this->createPaymentMethod($paymentMethod);
         }
+    }
+
+    /**
+     * @When I login to admin interface as :user
+     * @param $userType
+     */
+    public function iLoginToAdminInterfaceAs($userType): void
+    {
+        if ($userType === static::ADMIN_USER) {
+            $this->shopInstance->logInToAdministrationPanel();
+        }
+    }
+
+    /**
+     * @Then I see :text on screen
+     * @param $text
+     */
+    public function iSeeOnScreen($text): void
+    {
+        $this->seeInCurrentUrl($this->shopInstance->getLocator()->page->wp_admin);
+        $this->see($text);
     }
 }
