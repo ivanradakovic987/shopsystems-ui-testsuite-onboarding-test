@@ -277,6 +277,9 @@ class GenericShopSystemStep extends GenericStep
         return $paymentMethod;
     }
 
+    /**
+     * @throws Exception
+     */
     public function logInToAdministrationPanel()
     {
         $this->amOnPage($this->getLocator()->page->admin_login);
