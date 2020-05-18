@@ -161,8 +161,7 @@ class GenericShopSystemStep extends GenericStep
     {
         if ($customerType === static::REGISTERED_CUSTOMER) {
             return $this->registeredCustomer;
-        }
-        else if ($customerType === static::ADMIN_USER) {
+        } elseif ($customerType === static::ADMIN_USER) {
             return $this->adminUser;
         }
         return $this->guestCustomer;
