@@ -4,6 +4,7 @@ namespace Step\Acceptance\ShopSystem;
 
 use Codeception\Scenario;
 use Exception;
+use Facebook\WebDriver\Exception\NoSuchElementException;
 use Helper\Config\Customer\CustomerConfig;
 use Helper\Config\FileSytem;
 use Step\Acceptance\GenericStep;
@@ -24,6 +25,11 @@ class GenericShopSystemStep extends GenericStep
      */
     private $registeredCustomer;
 
+    /**
+     * @var CustomerConfig;
+     */
+    private $adminUser;
+
     private $mappedPaymentActions;
 
     /**
@@ -37,8 +43,9 @@ class GenericShopSystemStep extends GenericStep
      * @param $gateway
      * @param $guestFileName
      * @param $registeredFileName
+     * @param $adminFileName
      */
-    public function __construct(Scenario $scenario, $gateway, $guestFileName, $registeredFileName)
+    public function __construct(Scenario $scenario, $gateway, $guestFileName, $registeredFileName, $adminFileName)
     {
         parent::__construct($scenario, $gateway);
         $this->setLocator($this->getDataFromDataFile($this->getFullPath(
@@ -51,20 +58,22 @@ class GenericShopSystemStep extends GenericStep
             $this->getFullPath(FileSytem::MAPPED_PAYMENT_ACTIONS_FOLDER_PATH
                 . static::STEP_NAME . DIRECTORY_SEPARATOR . static::STEP_NAME . 'MappedPaymentActions.json')
         );
-        $this->createCustomerObjects($guestFileName, $registeredFileName);
+        $this->createCustomerObjects($guestFileName, $registeredFileName, $adminFileName);
     }
 
     /**
      * @param $guestFileName
      * @param $registeredFileName
+     * @param $adminFileName
      */
-    public function createCustomerObjects($guestFileName, $registeredFileName): void
+    public function createCustomerObjects($guestFileName, $registeredFileName, $adminFileName): void
     {
         $dataFolderPath = $this->getFullPath(FileSytem::CUSTOMER_DATA_FOLDER_PATH);
         $this->guestCustomer = new CustomerConfig($this->getDataFromDataFile($dataFolderPath . $guestFileName));
         $this->registeredCustomer = new CustomerConfig($this->getDataFromDataFile(
             $dataFolderPath . $registeredFileName
         ));
+        $this->adminUser = new CustomerConfig($this->getDataFromDataFile($dataFolderPath . $adminFileName));
     }
 
     /**
@@ -152,6 +161,8 @@ class GenericShopSystemStep extends GenericStep
     {
         if ($customerType === static::REGISTERED_CUSTOMER) {
             return $this->registeredCustomer;
+        } elseif ($customerType === static::ADMIN_USER) {
+            return $this->adminUser;
         }
         return $this->guestCustomer;
     }
@@ -264,5 +275,27 @@ class GenericShopSystemStep extends GenericStep
             return 'CreditCard';
         }
         return $paymentMethod;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function logInToAdministrationPanel()
+    {
+        $this->amOnPage($this->getLocator()->page->admin_login);
+        try {
+            $this->preparedFillField(
+                $this->getLocator()->wordpress_sign_in->user,
+                $this->getCustomer(static::ADMIN_USER)->getEmailAddress(),
+                10
+            );
+            $this->preparedFillField(
+                $this->getLocator()->wordpress_sign_in->pass,
+                $this->getCustomer(static::ADMIN_USER)->getPassword()
+            );
+            $this->preparedClick($this->getLocator()->wordpress_sign_in->login, 60);
+        } catch (NoSuchElementException $e) {
+            $this->amOnPage($this->getLocator()->page->admin_login);
+        }
     }
 }
