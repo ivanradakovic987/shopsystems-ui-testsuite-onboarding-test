@@ -7,3 +7,4 @@ Feature: AdminLoginHappyPath
     Given I initialize shop system
     When I login to admin interface as "admin user"
     Then I see "Howdy, admin" on screen
+    

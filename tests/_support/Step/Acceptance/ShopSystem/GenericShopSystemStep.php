@@ -295,9 +295,4 @@ class GenericShopSystemStep extends GenericStep
             $this->amOnPage($this->getLocator()->page->admin_login);
         }
     }
-
-    public function validateWpAdminPage(): void
-    {
-        $this->waitUntil(60, [$this, 'waitUntilPageLoaded'], [$this->getLocator()->page->wp_admin]);
-    }
 }
