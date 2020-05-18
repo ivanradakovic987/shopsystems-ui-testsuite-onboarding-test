@@ -10,6 +10,8 @@
         "codeception/codeception": "3.1.2"
     },
     "scripts": {
-        "run-ui-tests": "vendor/bin/codecept run acceptance  --debug --html"
+        "run-ui-tests": "vendor/bin/codecept run acceptance  --debug --html",
+        "cs-check": "vendor/bin/phpcs",
+        "cs-fix": "vendor/bin/phpcbf"
     }
 }
