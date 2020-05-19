@@ -265,4 +265,12 @@ class GenericShopSystemStep extends GenericStep
         }
         return $paymentMethod;
     }
+
+    /**
+     * @return CustomerConfig
+     */
+    public function getGuestCustomer()
+    {
+        return $this->guestCustomer;
+    }
 }
