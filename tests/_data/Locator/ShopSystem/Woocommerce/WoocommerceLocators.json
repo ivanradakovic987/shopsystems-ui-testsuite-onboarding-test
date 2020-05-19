@@ -3,7 +3,8 @@
     "product": "/product/polo/",
     "checkout": "/checkout",
     "order_received": "order-received",
-    "sign_in": "my-account/"
+    "sign_in": "my-account/",
+    "woo_album_product": "/product/album/"
   },
   "product": {
     "price": "20",

@@ -291,4 +291,65 @@ class AcceptanceTester extends Actor
             $this->paymentMethod = $this->createPaymentMethod($paymentMethod);
         }
     }
+
+    /**
+     * @When I add some good music to cart
+     */
+    public function iAddSomeGoodMusicToCart(): void
+    {
+        $this->amOnPage($this->shopInstance->getLocator()->page->woo_album_product);
+        $this->fillField($this->shopInstance->getLocator()->product->quantity, 1);
+        $this->click($this->shopInstance->getLocator()->product->add_to_cart);
+    }
+
+    /**
+     * @When I go to checkout
+     */
+    public function iGoToCheckout(): void
+    {
+        $this->amOnPage($this->shopInstance->getLocator()->page->checkout);
+    }
+
+    /**
+     * @When I fill billing details and place the order
+     */
+    public function iFillBillingDetailsAndPlaceTheOrder(): void
+    {
+        $this->fillField(
+            $this->shopInstance->getLocator()->checkout->first_name,
+            $this->shopInstance->getGuestCustomer()->getFirstName()
+        );
+        $this->fillField(
+            $this->shopInstance->getLocator()->checkout->last_name,
+            $this->shopInstance->getGuestCustomer()->getLastName()
+        );
+        $this->click($this->shopInstance->getLocator()->checkout->country);
+        $this->fillField(
+            $this->shopInstance->getLocator()->checkout->country_entry,
+            $this->shopInstance->getGuestCustomer()->getCountry()
+        );
+        $this->click($this->shopInstance->getLocator()->checkout->country_entry_selected);
+        $this->fillField(
+            $this->shopInstance->getLocator()->checkout->street_address,
+            $this->shopInstance->getGuestCustomer()->getStreetAddress()
+        );
+        $this->fillField(
+            $this->shopInstance->getLocator()->checkout->town,
+            $this->shopInstance->getGuestCustomer()->getTown()
+        );
+        $this->fillField(
+            $this->shopInstance->getLocator()->checkout->post_code,
+            $this->shopInstance->getGuestCustomer()->getPostCode()
+        );
+        $this->fillField(
+            $this->shopInstance->getLocator()->checkout->phone,
+            $this->shopInstance->getGuestCustomer()->getPhone()
+        );
+        $this->fillField(
+            $this->shopInstance->getLocator()->checkout->email_address,
+            $this->shopInstance->getGuestCustomer()->getEmailAddress()
+        );
+        $this->click($this->shopInstance->getLocator()->checkout->wirecard_creditcard);
+        $this->click($this->shopInstance->getLocator()->checkout->place_order);
+    }
 }
