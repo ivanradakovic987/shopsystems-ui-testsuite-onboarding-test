@@ -213,11 +213,10 @@ class WoocommerceStep extends GenericShopSystemStep implements
         $paymentMethodRadioButtonLocator  = 'wirecard_' . strtolower($paymentMethod);
         $this->preparedClick($this->getLocator()->checkout->$paymentMethodRadioButtonLocator);
 
-        if ($this->areAdditionalActionsNeeded($paymentMethod)) {
-            $this->performAdditionalActions($paymentMethod, $bank);
-        }
+        $this->selectBank($paymentMethod, $bank);
 
         $this->preparedClick($this->getLocator()->checkout->place_order);
+
         if (!$this->isRedirectPaymentMethod($paymentMethod)) {
             $this->startCreditCardPayment($paymentMethod);
         }

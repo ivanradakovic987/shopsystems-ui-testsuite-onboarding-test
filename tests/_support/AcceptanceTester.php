@@ -53,7 +53,8 @@ class AcceptanceTester extends Actor
     private $paymentMethodInstanceMap = [
         'CreditCard' => Step\Acceptance\PaymentMethod\CreditCardStep::class,
         'CreditCardOneClick' => Step\Acceptance\PaymentMethod\CreditCardOneClickStep::class,
-        'PayPal' => Step\Acceptance\PaymentMethod\PayPalStep::class
+        'PayPal' => Step\Acceptance\PaymentMethod\PayPalStep::class,
+        'iDeal' => Step\Acceptance\PaymentMethod\IdealStep::class
     ];
 
     /**

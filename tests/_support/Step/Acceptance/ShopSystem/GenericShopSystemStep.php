@@ -268,22 +268,10 @@ class GenericShopSystemStep extends GenericStep
 
     /**
      * @param $paymentMethod
-     * @return bool
-     */
-    public function areAdditionalActionsNeeded($paymentMethod): bool
-    {
-        if (strcasecmp($paymentMethod, static::IDEAL) === 0) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * @param $paymentMethod
      * @param $bank
      * @throws Exception
      */
-    public function performAdditionalActions($paymentMethod, $bank): void
+    public function selectBank($paymentMethod, $bank): void
     {
         if (strcasecmp($paymentMethod, static::IDEAL) === 0) {
             //select bank from combobox
