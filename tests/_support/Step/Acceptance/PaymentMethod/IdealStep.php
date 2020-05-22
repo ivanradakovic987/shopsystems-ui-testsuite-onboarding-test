@@ -17,6 +17,8 @@ class IdealStep extends GenericPaymentMethodStep implements iPerformPayment
      */
     public function performPaymentMethodActionsOutsideShop() : void
     {
-        $this->preparedClick($this->getLocator()->confirm_transaction, 60);
+        //checking merchant return url in iDEAL Issuer Simulation
+        $returnUrl=$this->preparedGrabValueFrom($this->getLocator()->merchant_return_url);
+        $this->amOnUrl($returnUrl);
     }
 }
